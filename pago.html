@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago seguro — Patagonia Origins Co.</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header" data-chrome="header"></header>
+
+  <div class="container pay">
+    <a class="breadcrumb" href="checkout.html" style="display:inline-block">← <span data-i18n="pay.back"></span></a>
+    <h1 data-i18n="pay.title" style="margin:.4rem 0 .2rem"></h1>
+    <p class="muted" data-i18n="pay.sub"></p>
+    <div id="pay-root"></div>
+  </div>
+
+  <footer class="site-footer" data-chrome="footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    /* ---- Logos de marca (SVG inline, simplificados) ---- */
+    const LOGOS = {
+      visa: `<svg viewBox="0 0 60 20" xmlns="http://www.w3.org/2000/svg"><text x="30" y="16" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="bold" font-style="italic" font-size="17" fill="#1A1F71" letter-spacing="1">VISA</text></svg>`,
+      mastercard: `<svg viewBox="0 0 48 30" xmlns="http://www.w3.org/2000/svg"><circle cx="19" cy="15" r="11" fill="#EB001B"/><circle cx="30" cy="15" r="11" fill="#F79E1B"/><path d="M24.5 6.5a11 11 0 000 17 11 11 0 000-17z" fill="#FF5F00"/></svg>`,
+      amex: `<svg viewBox="0 0 48 30" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="30" rx="3" fill="#2E77BC"/><text x="24" y="13" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="bold" font-size="7.5" fill="#fff">AMERICAN</text><text x="24" y="22" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="bold" font-size="7.5" fill="#fff">EXPRESS</text></svg>`,
+      paypal: `<svg viewBox="0 0 74 20" xmlns="http://www.w3.org/2000/svg"><text x="2" y="16" font-family="Arial,Helvetica,sans-serif" font-weight="bold" font-style="italic" font-size="17"><tspan fill="#003087">Pay</tspan><tspan fill="#009CDE">Pal</tspan></text></svg>`,
+      payoneer: `<svg viewBox="0 0 92 20" xmlns="http://www.w3.org/2000/svg"><text x="2" y="16" font-family="Arial,Helvetica,sans-serif" font-weight="bold" font-size="16" fill="#FF4800" letter-spacing="-0.5">payoneer</text></svg>`,
+    };
+    function logoChip(k) { return `<span class="card-logo" title="${k}">${LOGOS[k]}</span>`; }
+
+    // Método sugerido desde el checkout: intl -> tarjeta, local -> tarjeta;
+    // el usuario puede cambiar de pestaña libremente.
+    let payTab = "card"; // "card" | "wallet"
+    function setPayTab(t) { payTab = t; render(); }
+
+    function payNow(e) {
+      if (e) e.preventDefault();
+      const root = document.getElementById("pay-root");
+      root.innerHTML = `
+        <div class="co-empty">
+          <div style="font-size:2.4rem;margin-bottom:.6rem;color:var(--green)">✓</div>
+          <h2 style="max-width:22ch;margin:0 auto 1rem">${t("pay.done")}</h2>
+          <a class="btn" href="catalogo.html">${t("cart.browse")}</a>
+        </div>`;
+      State.cart = [];
+      updateCartBadge();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return false;
+    }
+
+    function render() {
+      const root = document.getElementById("pay-root");
+      const cart = State.cart;
+
+      // Total del pedido (si hay carrito); si está vacío, mostramos un total de muestra
+      let subtotal = cart.reduce((s, i) => {
+        const p = getProduct(i.id); return p ? s + lineUnitPrice(p, i.variant) * i.qty : s;
+      }, 0);
+      const demo = subtotal === 0;
+      if (demo) subtotal = 306; // total de ejemplo para ver el layout
+
+      const cardPane = `
+        <div class="pay-card-preview">
+          <div class="chip"></div>
+          <div class="pan">•••• •••• •••• 4321</div>
+          <div class="row">
+            <span>${t("co.f.name")}<b id="pv-name">—</b></span>
+            <span>${t("pay.card.exp")}<b id="pv-exp">MM/AA</b></span>
+          </div>
+        </div>
+        <div class="co-field">
+          <label>${t("pay.card.number")}</label>
+          <input type="text" inputmode="numeric" placeholder="1234 5678 9012 3456" maxlength="19"
+                 oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(.{4})/g,'$1 ').trim()">
+        </div>
+        <div class="co-field">
+          <label>${t("pay.card.name")}</label>
+          <input type="text" placeholder="—" oninput="document.getElementById('pv-name').textContent=this.value||'—'">
+        </div>
+        <div class="co-grid2">
+          <div class="co-field">
+            <label>${t("pay.card.exp")}</label>
+            <input type="text" placeholder="MM/AA" maxlength="5"
+                   oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(.{2})/,'$1/').slice(0,5);document.getElementById('pv-exp').textContent=this.value||'MM/AA'">
+          </div>
+          <div class="co-field">
+            <label>${t("pay.card.cvc")}</label>
+            <input type="text" inputmode="numeric" placeholder="123" maxlength="4"
+                   oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+          </div>
+        </div>
+        <button class="btn btn--block" style="margin-top:.6rem" onclick="payNow(event)">
+          ${t("pay.pay")} ${priceUSD(subtotal)}
+        </button>`;
+
+      const walletPane = `
+        <div class="wallet-pane">
+          <p class="muted">${t("pay.wallet.body")}</p>
+          <button class="btn btn--block" style="background:#003087" onclick="payNow(event)">${t("pay.wallet.paypal")}</button>
+          <button class="btn btn--block" style="background:#FF4800;margin-top:.7rem" onclick="payNow(event)">${t("pay.wallet.payoneer")}</button>
+        </div>`;
+
+      root.innerHTML = `
+        <div class="pay-grid">
+          <div class="pay-panel">
+            <!-- Medios aceptados -->
+            <div class="pay-accepted">
+              <span class="lbl">${t("pay.accepted")}:</span>
+              ${["visa","mastercard","amex","paypal","payoneer"].map(logoChip).join("")}
+            </div>
+
+            <!-- Tabs de método -->
+            <div class="pay-tabs">
+              <button class="pay-tab ${payTab==="card"?"is-active":""}" onclick="setPayTab('card')">${t("pay.method.card")}</button>
+              <button class="pay-tab ${payTab==="wallet"?"is-active":""}" onclick="setPayTab('wallet')">${t("pay.method.wallet")}</button>
+            </div>
+
+            ${payTab === "card" ? cardPane : walletPane}
+
+            <div class="pay-demo-note">🔒 ${t("pay.demo")}</div>
+          </div>
+
+          <!-- Columna de seguridad + resumen -->
+          <aside>
+            <div class="pay-secure">
+              <div class="pay-secure-head">
+                <span class="lock">🔒</span>
+                <b>${t("pay.secure.title")}</b>
+              </div>
+              <ul>
+                <li><span class="tico">✓</span>${t("pay.secure.ssl")}</li>
+                <li><span class="tico">✓</span>${t("pay.secure.pci")}</li>
+                <li><span class="tico">✓</span>${t("pay.secure.nostore")}</li>
+              </ul>
+              <div class="pay-seal">
+                <span class="seal"><span class="s1">Secure</span><span class="s2">SSL</span></span>
+                <span class="seal"><span class="s1">PCI DSS</span><span class="s2">Level 1</span></span>
+                <span class="seal-txt">${t("pay.protected")}</span>
+              </div>
+            </div>
+
+            <div class="summary" style="margin-top:1.4rem;position:static">
+              <h3>${t("co.summary")}</h3>
+              <div class="sum-line"><span>${t("co.subtotal")}</span><span>${priceUSD(subtotal)}</span></div>
+              <div class="sum-line"><span>${t("co.delivery")}</span><span>${t("co.delivery.free")}</span></div>
+              <div class="sum-total"><span>${t("co.total")}</span><span>${priceUSD(subtotal)}</span></div>
+              <div class="sum-guarantee">
+                <span style="color:var(--green)">✓</span>
+                <span><b>${t("trust.guarantee")}</b></span>
+              </div>
+            </div>
+          </aside>
+        </div>`;
+    }
+
+    window.renderPage = render;
+  </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Producto — Patagonia Origins Co.</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header" data-chrome="header"></header>
+
+  <div class="container pdp">
+    <div class="breadcrumb" id="crumb"></div>
+    <div id="pdp-root"></div>
+  </div>
+
+  <footer class="site-footer" data-chrome="footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function getParam(k) { return new URLSearchParams(location.search).get(k); }
+    const productId = getParam("id");
+    let selectedVariant = null;
+    let activeImage = 0;
+
+    function currentUnitPrice(p) {
+      let base = p.priceUSD, baseARS = p.priceARS;
+      if (p.variants && selectedVariant) {
+        const v = p.variants.find(x => x.id === selectedVariant);
+        if (v) { base += v.priceDelta; baseARS += Math.round(v.priceDelta * 1300); }
+      }
+      return { usd: base, ars: baseARS };
+    }
+    function variantStock(p) {
+      if (p.variants && selectedVariant) {
+        const v = p.variants.find(x => x.id === selectedVariant);
+        return v ? v.stock : 0;
+      }
+      return p.stock;
+    }
+
+    function selectVariant(id) { selectedVariant = id; window.renderPage(); }
+    function setImage(i) { activeImage = i; window.renderPage(); }
+    function toggleZoom(el) { el.classList.toggle("zoomed"); }
+    function changeQty(delta) {
+      const inp = document.getElementById("qty");
+      const max = variantStock(getProduct(productId));
+      let v = parseInt(inp.value || "1", 10) + delta;
+      inp.value = Math.min(Math.max(1, v), Math.max(1, max));
+    }
+    function doAdd() {
+      const p = getProduct(productId);
+      const qty = parseInt(document.getElementById("qty").value || "1", 10);
+      addToCart(p.id, selectedVariant, qty);
+      const ok = document.getElementById("add-ok");
+      ok.textContent = t("pdp.added");
+      setTimeout(() => ok.textContent = "", 2600);
+    }
+    function askQuestion(e) {
+      e.preventDefault();
+      document.getElementById("ask-ok").textContent = t("pdp.ask.ok");
+      e.target.reset();
+      return false;
+    }
+
+    window.renderPage = function () {
+      const p = getProduct(productId);
+      const root = document.getElementById("pdp-root");
+      if (!p) { root.innerHTML = `<h1>404</h1><p>${State.lang === "es" ? "Producto no encontrado." : "Product not found."}</p>`; return; }
+
+      // Default variant = primera con stock
+      if (p.variants && selectedVariant === null) {
+        const first = p.variants.find(v => v.stock > 0) || p.variants[0];
+        selectedVariant = first.id;
+      }
+
+      const cat = getCategory(p.category);
+      const price = currentUnitPrice(p);
+      const stock = variantStock(p);
+      const sold = stock <= 0;
+      const low = !sold && stock <= 3;
+
+      // Breadcrumb
+      document.getElementById("crumb").innerHTML =
+        `<a href="index.html">${t("nav.home")}</a> · <a href="catalogo.html">${t("nav.shop")}</a> · <a href="catalogo.html?category=${p.category}">${tf(cat.name)}</a> · <span>${tf(p.name)}</span>`;
+
+      // Galería: foto real del producto (con variaciones de placeholder como respaldo)
+      const imgs = p.image ? [p.image] : [
+        photoPlaceholder(p, true),
+        photoPlaceholder({ ...p, swatch: [p.swatch[1], p.swatch[0]] }, true),
+        photoPlaceholder({ ...p, swatch: ["#7A7466", p.swatch[0]] }, true),
+      ];
+      if (activeImage >= imgs.length) activeImage = 0;
+
+      // Variantes
+      let variantHTML = "";
+      if (p.variants) {
+        variantHTML = `
+          <div class="field">
+            <label>${t("pdp.variant")}</label>
+            <div class="variant-opts">
+              ${p.variants.map(v => `
+                <button class="${v.id === selectedVariant ? "is-active" : ""}" ${v.stock <= 0 ? "disabled" : ""}
+                        onclick="selectVariant('${v.id}')">${tf(v.label)}${v.priceDelta ? ` (+US$${v.priceDelta})` : ""}</button>`).join("")}
+            </div>
+          </div>`;
+      }
+
+      // Reseñas
+      const reviewsHTML = p.reviews.length ? p.reviews.map(r => `
+        <div class="review">
+          <div class="review-top">
+            <span class="review-author">${r.author}</span>
+            ${stars(r.rating)}
+            ${r.verified ? `<span class="verified-chip">${t("pdp.verified")}</span>` : ""}
+          </div>
+          <p style="margin:0" class="muted">${tf(r.text)}</p>
+        </div>`).join("") : `<p class="muted">${t("pdp.reviews.none")}</p>`;
+
+      // Relacionados
+      const related = (p.related || []).map(getProduct).filter(Boolean);
+
+      root.innerHTML = `
+        <div class="pdp-grid">
+          <!-- Galería con zoom -->
+          <div class="gallery">
+            <div class="gallery-main" onclick="toggleZoom(this)">
+              <img src="${imgs[activeImage]}" ${imgFallbackAttr(p, true)} alt="${escapeXml(tf(p.name))}">
+              <span class="gallery-zoom-hint">${State.lang === "es" ? "Clic para zoom" : "Click to zoom"}</span>
+            </div>
+            ${imgs.length > 1 ? `
+            <div class="gallery-thumbs">
+              ${imgs.map((src, i) => `<button class="${i === activeImage ? "is-active" : ""}" onclick="setImage(${i})"><img src="${src}" alt="vista ${i + 1}"></button>`).join("")}
+            </div>` : ""}
+          </div>
+
+          <!-- Info + buybox -->
+          <div class="pdp-info">
+            <div class="pcard-cat">${tf(cat.name)}</div>
+            <h1>${tf(p.name)}</h1>
+            <p class="pdp-tagline">${tf(p.tagline)}</p>
+            <div class="pdp-price">${priceUSD(price.usd)}<span class="ars">${priceARSref(price.ars)}</span></div>
+
+            <div class="pdp-origin"><b>${t("pdp.by")}:</b> ${tf(p.maker)}</div>
+
+            <div class="stock-line">
+              <span class="stock-dot ${sold ? "out" : (low ? "low" : "")}"></span>
+              ${sold ? t("pdp.sold") : `<b>${stock}</b>&nbsp;${t("pdp.stock")}`}
+            </div>
+
+            <div class="buybox">
+              ${variantHTML}
+              <div class="field">
+                <label>${t("pdp.qty")}</label>
+                <div class="buy-row">
+                  <div class="qty">
+                    <button type="button" onclick="changeQty(-1)" ${sold ? "disabled" : ""}>−</button>
+                    <input id="qty" type="text" value="1" inputmode="numeric" ${sold ? "disabled" : ""} readonly>
+                    <button type="button" onclick="changeQty(1)" ${sold ? "disabled" : ""}>+</button>
+                  </div>
+                  <button class="btn" onclick="doAdd()" ${sold ? "disabled" : ""}>
+                    ${sold ? t("pdp.sold") : t("pdp.add")}
+                  </button>
+                </div>
+                <div class="add-ok" id="add-ok"></div>
+              </div>
+
+              <!-- Bloque de confianza cerca del botón de compra -->
+              <div class="trust-box">
+                <div class="trust-item"><span class="tico">✓</span><span><b>${t("trust.guarantee")}</b></span></div>
+                <div class="trust-item"><span class="tico">✓</span><span>${t("trust.curated")}</span></div>
+                <div class="trust-item"><span class="tico">✓</span><span>${t("trust.reviews")}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloques largos -->
+        <div class="pdp-blocks">
+          <div class="pdp-block">
+            <h2>${t("pdp.story.title")}</h2>
+            <p>${tf(p.story)}</p>
+          </div>
+
+          <!-- Packaging como momento de marca -->
+          <div class="pdp-block pack-callout">
+            <h2>${t("pdp.pack.title")}</h2>
+            <p style="margin:0">${tf(p.packaging)}</p>
+          </div>
+
+          <div class="pdp-block">
+            <h2>${t("pdp.reviews.title")}</h2>
+            <div class="reviews-list">${reviewsHTML}</div>
+          </div>
+
+          <!-- Preguntas al equipo de Patagonia Origins Co. -->
+          <div class="pdp-block">
+            <h2>${t("pdp.ask.title")}</h2>
+            <div class="ask-box">
+              <p class="muted" style="margin-top:0">${t("pdp.ask.body")}</p>
+              <form onsubmit="return askQuestion(event)">
+                <textarea required placeholder="${escapeXml(t("pdp.ask.ph"))}"></textarea>
+                <button class="btn" type="submit">${t("pdp.ask.cta")}</button>
+              </form>
+              <div class="ask-ok" id="ask-ok"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Relacionados -->
+        ${related.length ? `
+        <div class="section" style="padding-bottom:0">
+          <h2 style="margin-bottom:1.6rem">${t("pdp.related")}</h2>
+          <div class="product-grid cols-3">${related.map(productCardHTML).join("")}</div>
+        </div>` : ""}
+      `;
+      document.title = `${tf(p.name)} — Patagonia Origins Co.`;
+    };
+  </script>
+</body>
+</html>

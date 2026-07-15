@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar compra — Patagonia Origins Co.</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header" data-chrome="header"></header>
+
+  <div class="container checkout">
+    <h1 data-i18n="co.title" style="margin-bottom:1.6rem"></h1>
+    <div id="co-root"></div>
+  </div>
+
+  <footer class="site-footer" data-chrome="footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Estado del checkout
+    let segment = "crucero";     // "crucero" | "esqui"
+    let delivery = null;         // opción de entrega según segmento
+    let payment = "intl";        // "intl" | "local"
+
+    function setSegment(s) {
+      segment = s;
+      delivery = null; // reset: las opciones de entrega dependen del segmento
+      // pago sugerido por segmento (editable): crucero->intl, esqui->local
+      payment = s === "crucero" ? "intl" : "local";
+      window.renderPage();
+    }
+    function setDelivery(d) { delivery = d; window.renderPage(); }
+    function setPayment(p) { payment = p; window.renderPage(); }
+
+    function coChangeQty(id, variant, delta) {
+      const it = State.cart.find(i => i.id === id && (i.variant || "_") === (variant || "_"));
+      if (!it) return;
+      setQty(id, variant, it.qty + delta);
+      updateCartBadge();
+      window.renderPage();
+    }
+    function coRemove(id, variant) { removeFromCart(id, variant); window.renderPage(); }
+
+    function placeOrder(e) {
+      e.preventDefault();
+      if (!delivery) { alert(State.lang === "es" ? "Elegí una modalidad de entrega." : "Please choose a delivery option."); return false; }
+      // Continuar al ingreso de pago (según el método elegido)
+      location.href = "pago.html?method=" + payment;
+      return false;
+    }
+
+    function deliveryChoices() {
+      // Opciones condicionadas por tipo de visitante
+      if (segment === "crucero") {
+        return [
+          { id: "dock", title: t("co.del.dock"), desc: "" },
+          { id: "onboard", title: t("co.del.beforeSail"), desc: "" },
+        ];
+      }
+      return [
+        { id: "hotel", title: t("co.del.hotel"), desc: "" },
+        { id: "point", title: t("co.del.point"), desc: "" },
+      ];
+    }
+
+    window.renderPage = function () {
+      const cart = State.cart;
+      const root = document.getElementById("co-root");
+
+      if (!cart.length) {
+        root.innerHTML = `
+          <div class="co-empty">
+            <p class="muted" style="font-size:1.1rem">${t("cart.empty")}</p>
+            <a class="btn" href="catalogo.html" style="margin-top:1rem">${t("cart.browse")}</a>
+          </div>`;
+        return;
+      }
+
+      // Items del resumen
+      let subtotal = 0;
+      const itemsHTML = cart.map(i => {
+        const p = getProduct(i.id);
+        if (!p) return "";
+        const unit = lineUnitPrice(p, i.variant);
+        subtotal += unit * i.qty;
+        const v = p.variants && i.variant ? p.variants.find(x => x.id === i.variant) : null;
+        return `
+          <div class="sum-item">
+            <img src="${productImage(p, true)}" ${imgFallbackAttr(p, true)} alt="">
+            <div>
+              <div class="si-name">${tf(p.name)}</div>
+              <div class="si-meta">${v ? tf(v.label) + " · " : ""}${priceUSD(unit)}</div>
+              <div class="sum-qty">
+                <button onclick="coChangeQty('${p.id}', ${i.variant ? `'${i.variant}'` : "null"}, -1)">−</button>
+                <span>${i.qty}</span>
+                <button onclick="coChangeQty('${p.id}', ${i.variant ? `'${i.variant}'` : "null"}, 1)">+</button>
+              </div>
+              <button class="sum-remove" onclick="coRemove('${p.id}', ${i.variant ? `'${i.variant}'` : "null"})">${t("co.remove")}</button>
+            </div>
+            <div class="si-price">${priceUSD(unit * i.qty)}</div>
+          </div>`;
+      }).join("");
+
+      // Etiquetas condicionadas por segmento
+      const deadlineLabel = segment === "crucero" ? t("co.deadline.cruise") : t("co.deadline.ski");
+      const isCruise = segment === "crucero";
+
+      root.innerHTML = `
+        <div class="checkout-grid">
+          <form onsubmit="return placeOrder(event)">
+
+            <!-- 1. Segmento de visitante -->
+            <div class="co-step">
+              <h2>${t("co.step.segment")}</h2>
+              <div class="choice-grid">
+                <label class="choice ${isCruise ? "is-active" : ""}" onclick="setSegment('crucero')">
+                  <div class="c-title">${t("co.seg.cruise")}</div>
+                  <div class="c-desc">${t("co.seg.cruise.d")}</div>
+                </label>
+                <label class="choice ${!isCruise ? "is-active" : ""}" onclick="setSegment('esqui')">
+                  <div class="c-title">${t("co.seg.ski")}</div>
+                  <div class="c-desc">${t("co.seg.ski.d")}</div>
+                </label>
+              </div>
+            </div>
+
+            <!-- 2. Entrega (condicionada por segmento) -->
+            <div class="co-step">
+              <h2>${t("co.step.delivery")}</h2>
+              <div class="choice-grid" style="margin-bottom:1.2rem">
+                ${deliveryChoices().map(d => `
+                  <label class="choice ${delivery === d.id ? "is-active" : ""}" onclick="setDelivery('${d.id}')">
+                    <div class="c-title">${d.title}</div>
+                  </label>`).join("")}
+              </div>
+              <div class="co-field">
+                <label>${deadlineLabel}</label>
+                <input type="datetime-local" required>
+                <div class="co-help">${t("co.deadline.help")}</div>
+              </div>
+            </div>
+
+            <!-- 3. Contacto (campos condicionados por segmento) -->
+            <div class="co-step">
+              <h2>${t("co.step.contact")}</h2>
+              <div class="co-grid2">
+                <div class="co-field"><label>${t("co.f.name")}</label><input type="text" required></div>
+                <div class="co-field"><label>${t("co.f.email")}</label><input type="email" required></div>
+              </div>
+              <div class="co-field">
+                <label>${isCruise ? t("co.f.ship") : t("co.f.hotel")}</label>
+                <input type="text" required>
+              </div>
+              <div class="co-field">
+                <label>${t("co.f.notes")}</label>
+                <textarea rows="2"></textarea>
+              </div>
+            </div>
+
+            <!-- 4. Pago dual: internacional + local -->
+            <div class="co-step">
+              <h2>${t("co.step.payment")}</h2>
+              <div class="choice-grid">
+                <label class="choice ${payment === "intl" ? "is-active" : ""}" onclick="setPayment('intl')">
+                  <div class="c-title">${t("co.pay.intl")}</div>
+                  <div class="c-desc">${t("co.pay.intl.d")}</div>
+                </label>
+                <label class="choice ${payment === "local" ? "is-active" : ""}" onclick="setPayment('local')">
+                  <div class="c-title">${t("co.pay.local")}</div>
+                  <div class="c-desc">${t("co.pay.local.d")}</div>
+                </label>
+              </div>
+            </div>
+
+            <button class="btn btn--block" type="submit" style="margin-top:1.4rem">${t("co.place")}</button>
+          </form>
+
+          <!-- Resumen -->
+          <aside class="summary">
+            <h3>${t("co.summary")}</h3>
+            <div class="sum-items">${itemsHTML}</div>
+            <div class="sum-line"><span>${t("co.subtotal")}</span><span>${priceUSD(subtotal)}</span></div>
+            <div class="sum-line"><span>${t("co.delivery")}</span><span>${t("co.delivery.free")}</span></div>
+            <div class="sum-total"><span>${t("co.total")}</span><span>${priceUSD(subtotal)}</span></div>
+            <div class="sum-line" style="padding-top:.2rem"><span></span><span class="muted" style="font-size:.8rem">${priceARSref(cart.reduce((s,i)=>{const p=getProduct(i.id);return p?s+p.priceARS*i.qty:s;},0))} ${State.lang==="es"?"aprox.":"approx."}</span></div>
+            <div class="sum-guarantee">
+              <span style="color:var(--green)">✓</span>
+              <span><b>${t("trust.guarantee")}</b> — ${t("trust.curated")}.</span>
+            </div>
+          </aside>
+        </div>`;
+    };
+  </script>
+</body>
+</html>

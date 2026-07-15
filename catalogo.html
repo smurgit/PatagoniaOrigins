@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo — Patagonia Origins Co.</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header" data-chrome="header"></header>
+
+  <div class="container plp-head">
+    <p class="eyebrow" id="plp-context" data-i18n="nav.shop"></p>
+    <h1 data-i18n="plp.title"></h1>
+    <p class="muted" data-i18n="plp.subtitle"></p>
+  </div>
+
+  <div class="container">
+    <div class="plp-layout">
+      <!-- Filtros de alto nivel: categoría, precio, disponibilidad -->
+      <aside class="filters">
+        <h3 data-i18n="plp.filters"></h3>
+
+        <div class="filter-group">
+          <label data-i18n="plp.f.category"></label>
+          <div class="filter-opts" id="f-categories"></div>
+        </div>
+
+        <div class="filter-group">
+          <label data-i18n="plp.f.price"></label>
+          <select id="f-price" onchange="applyFilters()">
+            <option value="all">—</option>
+            <option value="0-30">US$ 0 – 30</option>
+            <option value="30-80">US$ 30 – 80</option>
+            <option value="80-150">US$ 80 – 150</option>
+            <option value="150-9999">US$ 150+</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label data-i18n="plp.f.avail"></label>
+          <div class="filter-opts">
+            <label>
+              <input type="checkbox" id="f-instock" onchange="applyFilters()">
+              <span data-i18n="plp.f.instock"></span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn btn--ghost btn--block" style="font-size:.72rem;padding:.6rem" onclick="clearFilters()" data-i18n="plp.clear"></button>
+      </aside>
+
+      <div>
+        <div class="plp-toolbar">
+          <span class="count"><b id="plp-count">0</b> <span data-i18n="plp.count"></span></span>
+          <div class="sort">
+            <label data-i18n="plp.sort"></label>
+            <select id="sort" onchange="applyFilters()">
+              <option value="feat" data-i18n-opt="plp.sort.feat"></option>
+              <option value="new" data-i18n-opt="plp.sort.new"></option>
+              <option value="priceA" data-i18n-opt="plp.sort.priceA"></option>
+              <option value="priceD" data-i18n-opt="plp.sort.priceD"></option>
+            </select>
+          </div>
+        </div>
+
+        <div class="product-grid" id="grid"></div>
+        <div class="plp-empty co-hide" id="empty" data-i18n="plp.empty"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" data-chrome="footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const PER_PAGE = 6;
+    let currentPage = 1;
+
+    function getParam(k) { return new URLSearchParams(location.search).get(k); }
+    let activeCategory = getParam("category") || "all";
+    const activeCollection = getParam("collection");
+
+    function buildCategoryFilter() {
+      const el = document.getElementById("f-categories");
+      const opts = [{ id: "all", name: { es: "Todas", en: "All" } }, ...CATEGORIES];
+      el.innerHTML = opts.map(c => `
+        <label>
+          <input type="radio" name="cat" value="${c.id}" ${c.id === activeCategory ? "checked" : ""}
+                 onchange="activeCategory='${c.id}'; currentPage=1; renderGrid()">
+          <span>${tf(c.name)}</span>
+        </label>`).join("");
+    }
+
+    function currentSet() {
+      let set = PRODUCTS.slice();
+      if (activeCollection) set = set.filter(p => p.collections.includes(activeCollection));
+      if (activeCategory !== "all") set = set.filter(p => p.category === activeCategory);
+
+      const price = document.getElementById("f-price").value;
+      if (price !== "all") {
+        const [lo, hi] = price.split("-").map(Number);
+        set = set.filter(p => p.priceUSD >= lo && p.priceUSD <= hi);
+      }
+      if (document.getElementById("f-instock").checked) set = set.filter(p => p.stock > 0);
+
+      const sort = document.getElementById("sort").value;
+      if (sort === "priceA") set.sort((a, b) => a.priceUSD - b.priceUSD);
+      else if (sort === "priceD") set.sort((a, b) => b.priceUSD - a.priceUSD);
+      else if (sort === "new") set.sort((a, b) => (b.isNew - a.isNew));
+      else set.sort((a, b) => (b.featured - a.featured)); // destacados
+      return set;
+    }
+
+    function renderGrid() {
+      const set = currentSet();
+      document.getElementById("plp-count").textContent = set.length;
+
+      const totalPages = Math.max(1, Math.ceil(set.length / PER_PAGE));
+      if (currentPage > totalPages) currentPage = 1;
+      const pageItems = set.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+      const grid = document.getElementById("grid");
+      const empty = document.getElementById("empty");
+      grid.innerHTML = pageItems.map(productCardHTML).join("");
+      empty.classList.toggle("co-hide", set.length !== 0);
+
+      // Paginación clásica
+      const pag = document.getElementById("pagination");
+      if (totalPages <= 1) { pag.innerHTML = ""; return; }
+      let html = `<button ${currentPage === 1 ? "disabled" : ""} onclick="goPage(${currentPage - 1})">‹</button>`;
+      for (let i = 1; i <= totalPages; i++)
+        html += `<button class="${i === currentPage ? "is-active" : ""}" onclick="goPage(${i})">${i}</button>`;
+      html += `<button ${currentPage === totalPages ? "disabled" : ""} onclick="goPage(${currentPage + 1})">›</button>`;
+      pag.innerHTML = html;
+    }
+    function goPage(n) { currentPage = n; renderGrid(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+    function applyFilters() { currentPage = 1; renderGrid(); }
+    function clearFilters() {
+      activeCategory = "all";
+      document.getElementById("f-price").value = "all";
+      document.getElementById("f-instock").checked = false;
+      document.getElementById("sort").value = "feat";
+      currentPage = 1;
+      buildCategoryFilter();
+      renderGrid();
+    }
+
+    window.renderPage = function () {
+      // Traducir opciones de <select>
+      document.querySelectorAll("[data-i18n-opt]").forEach(o => o.textContent = t(o.getAttribute("data-i18n-opt")));
+      // Contexto: colección
+      const ctx = document.getElementById("plp-context");
+      if (activeCollection) {
+        const col = getCollection(activeCollection);
+        if (col) ctx.textContent = tf(col.title);
+      }
+      buildCategoryFilter();
+      renderGrid();
+    };
+  </script>
+</body>
+</html>
