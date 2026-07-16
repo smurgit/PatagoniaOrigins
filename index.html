@@ -9,14 +9,6 @@
 <body>
   <header class="site-header" data-chrome="header"></header>
 
-  <!-- Aviso: paleta/tipografía provisorias -->
-  <div class="brand-note">
-    <div class="container">
-      <span>◭</span>
-      <span data-i18n-html="_brandnote"></span>
-    </div>
-  </div>
-
   <!-- HERO -->
   <section class="hero">
     <div class="container hero-inner">
@@ -92,12 +84,6 @@
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
-    // Aviso de marca provisoria (bilingüe, inyectado por data-i18n-html)
-    T["_brandnote"] = {
-      es: "<b>Identidad de marca aplicada</b> — logo, paleta oficial y tipografía Glacial Indifference. Sólo las fotos de producto son de muestra (en el sitio final se usan fotos propias).",
-      en: "<b>Brand identity applied</b> — logo, official palette and Glacial Indifference type. Only the product photos are placeholders (the final site uses your own)."
-    };
-
     function subscribeNews(e) {
       e.preventDefault();
       document.getElementById("news-ok").textContent = t("home.news.ok");

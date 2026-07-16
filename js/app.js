@@ -3,6 +3,20 @@
    i18n ES/EN · carrito (localStorage) · header/footer · helpers
    ============================================================ */
 
+/* ---------------- Google Analytics 4 ---------------- */
+(function () {
+  var GA_ID = "G-KGQ5048C6S";
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag("js", new Date());
+  gtag("config", GA_ID);
+})();
+
 /* ---------------- Estado global ---------------- */
 const STORE_LANG = "poco_lang";
 const STORE_CART = "poco_cart";
@@ -26,6 +40,14 @@ const T = {
   "nav.cart":        { es: "Bolsa",        en: "Bag" },
   "brand.tagline":   { es: "Curaduría patagónica auténtica",
                        en: "Authentic Patagonian curation" },
+
+  /* Disclaimer de sitio de prueba (todas las páginas) */
+  "disc.tag":        { es: "Sitio de prueba", en: "Test site" },
+  "disc.body":       { es: "Las imágenes de producto son de muestra. No ingreses datos reales: no hace falta información verdadera para probar la compra, no se procesan pagos ni se guardan tus datos personales.",
+                       en: "Product images are placeholders. Don't enter real data: no real information is needed to try the checkout, no payments are processed and no personal data is stored." },
+  "co.notice.title": { es: "Checkout de demostración", en: "Demo checkout" },
+  "co.notice.body":  { es: "No ingreses datos reales ni información de tarjeta. No se guardan tus datos personales, no se procesa ningún pago y no se genera ninguna orden. Completá lo que quieras para probar el flujo.",
+                       en: "Don't enter real or card details. No personal data is stored, no payment is processed and no order is created. Fill in anything you like to test the flow." },
 
   /* Footer */
   "footer.impact.title": { es: "Compra de triple impacto",
@@ -403,6 +425,18 @@ function buildChrome() {
           </a>
         </div>
       </div>`;
+    // Disclaimer de sitio de prueba, debajo del header, en todas las páginas
+    if (!document.querySelector(".site-disclaimer")) {
+      const disc = document.createElement("div");
+      disc.className = "site-disclaimer";
+      disc.setAttribute("role", "note");
+      disc.innerHTML = `
+        <div class="container">
+          <span class="disc-ico" aria-hidden="true">ⓘ</span>
+          <span><b data-i18n="disc.tag"></b> — <span data-i18n="disc.body"></span></span>
+        </div>`;
+      header.insertAdjacentElement("afterend", disc);
+    }
   }
   const footer = document.querySelector("[data-chrome=footer]");
   if (footer) {
