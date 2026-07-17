@@ -149,16 +149,23 @@
               </div>
             </div>
 
-            <!-- 3. Contacto (campos condicionados por segmento) -->
+            <!-- 3. Contacto -->
             <div class="co-step">
               <h2>${t("co.step.contact")}</h2>
               <div class="co-grid2">
                 <div class="co-field"><label>${t("co.f.name")}</label><input type="text" required></div>
                 <div class="co-field"><label>${t("co.f.email")}</label><input type="email" required></div>
               </div>
-              <div class="co-field">
-                <label>${isCruise ? t("co.f.ship") : t("co.f.hotel")}</label>
-                <input type="text" required>
+              <div class="co-grid2">
+                <div class="co-field">
+                  <label>${t("co.f.phone")}</label>
+                  <input type="tel" required placeholder="+54 9 ...">
+                  <div class="co-help">${t("co.f.phone.help")}</div>
+                </div>
+                <div class="co-field">
+                  <label>${t("co.f.ref")}</label>
+                  <input type="text">
+                </div>
               </div>
               <div class="co-field">
                 <label>${t("co.f.notes")}</label>
