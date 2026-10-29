@@ -1,5 +1,5 @@
 /* ============================================================
-   Patagonia Origins Co. — Lógica compartida (MOCKUP)
+   Patagonia Origins Co. | Lógica compartida (MOCKUP)
    i18n ES/EN · carrito (localStorage) · header/footer · helpers
    ============================================================ */
 
@@ -212,10 +212,10 @@ const T = {
                        en: "We document and share the story behind each creation. This way, we help crafts at risk of being lost find a space to keep beating. One example of this bridge is Rosa, a weaver from Río Grande: thanks to the platform, the skill of her hands and the story of her life now travel the world in the luggage of visitors from twelve countries." },
   "ab.env.t":        { es: "Impacto ambiental", en: "Environmental impact" },
   "ab.env.b":        { es: "Elegimos cuidar la tierra que nos cobija. Priorizamos fibras naturales, procesos limpios y empaques pensados para ser reutilizados o regresar a la naturaleza sin dejar huella. Cuidamos cada detalle: para proteger las piezas más delicadas, dejamos de lado el plástico de burbuja y las envolvemos en un nido de viruta de madera recuperada, un abrigo tan seguro como biodegradable.",
-                       en: "We choose to care for the land that shelters us. We prioritize natural fibers, clean processes and packaging designed to be reused or returned to nature without a trace. We look after every detail: to protect the most delicate pieces, we set aside bubble wrap and nest them in recovered wood shavings — a cushion as safe as it is biodegradable." },
+                       en: "We choose to care for the land that shelters us. We prioritize natural fibers, clean processes and packaging designed to be reused or returned to nature without a trace. We look after every detail: to protect the most delicate pieces, we set aside bubble wrap and nest them in recovered wood shavings, a cushion as safe as it is biodegradable." },
   "ab.story.t":      { es: "Cómo empezó", en: "How it started" },
-  "ab.story.b":      { es: "Patagonia Origins Co. nació observando la misma escena repetida en el puerto de Ushuaia: visitantes con pocas horas en tierra, buscando algo auténtico entre góndolas de imanes importados. Del otro lado, artesanos con piezas excepcionales y sin forma de llegar a ese visitante. Nos pusimos en el medio como curadores — un solo interlocutor confiable — para que esa compra suceda bien, para ambos lados.",
-                       en: "Patagonia Origins Co. was born watching the same scene repeat at the port of Ushuaia: visitors with only hours ashore, hunting for something authentic among racks of imported magnets. On the other side, artisans with exceptional pieces and no way to reach that visitor. We placed ourselves in between as curators — a single trustworthy interlocutor — so that purchase happens well, for both sides." },
+  "ab.story.b":      { es: "Patagonia Origins Co. nació observando la misma escena repetida en el puerto de Ushuaia: visitantes con pocas horas en tierra, buscando algo auténtico entre góndolas de imanes importados. Del otro lado, artesanos con piezas excepcionales y sin forma de llegar a ese visitante. Nos pusimos en el medio como curadores, un solo interlocutor confiable, para que esa compra suceda bien, para ambos lados.",
+                       en: "Patagonia Origins Co. was born watching the same scene repeat at the port of Ushuaia: visitors with only hours ashore, hunting for something authentic among racks of imported magnets. On the other side, artisans with exceptional pieces and no way to reach that visitor. We placed ourselves in between as curators, a single trustworthy interlocutor, so that purchase happens well, for both sides." },
   "ab.cta":          { es: "Ver la selección", en: "See the selection" },
 
   /* Página de pago */
@@ -238,8 +238,8 @@ const T = {
   "pay.secure.ssl":  { es: "Cifrado SSL de 256 bits", en: "256-bit SSL encryption" },
   "pay.secure.pci":  { es: "Certificación PCI-DSS Nivel 1", en: "PCI-DSS Level 1 certified" },
   "pay.secure.nostore": { es: "No almacenamos los datos de tu tarjeta", en: "We never store your card data" },
-  "pay.demo":        { es: "Modo demostración — no se procesa ningún pago real.",
-                       en: "Demo mode — no real payment is processed." },
+  "pay.demo":        { es: "Modo demostración: no se procesa ningún pago real.",
+                       en: "Demo mode: no real payment is processed." },
   "pay.done":        { es: "¡Pago aprobado! (demo). Te enviaremos la confirmación y los detalles de entrega por correo.",
                        en: "Payment approved! (demo). We'll email your confirmation and delivery details." },
   "pay.back":        { es: "Volver al checkout", en: "Back to checkout" },
@@ -395,7 +395,7 @@ function setLang(lang) {
 
 /* ---------------- Header / Footer inyectados ---------------- */
 function buildChrome() {
-  // Favicon (marca de montañas) — inyectado una sola vez para todas las páginas
+  // Favicon (marca de montañas), inyectado una sola vez para todas las páginas
   if (!document.querySelector("link[rel=icon]")) {
     const fav = document.createElement("link");
     fav.rel = "icon"; fav.type = "image/png"; fav.href = "img/logo-mark.png";
@@ -435,7 +435,7 @@ function buildChrome() {
       disc.innerHTML = `
         <div class="container">
           <span class="disc-ico" aria-hidden="true">ⓘ</span>
-          <span><b data-i18n="disc.tag"></b> — <span data-i18n="disc.body"></span></span>
+          <span><b data-i18n="disc.tag"></b>. <span data-i18n="disc.body"></span></span>
         </div>`;
       header.insertAdjacentElement("afterend", disc);
     }

@@ -1,10 +1,10 @@
 /* ============================================================
-   Patagonia Origins Co. — Estilos
+   Patagonia Origins Co. | Estilos
    PALETA DE MARCA (oficial):
      Tierra Patagónica #5C3D2E · Bosque Austral #4A6741
      Piedra Glaciar   #A8A39D · Hielo Azul     #6B9BAD
    TIPOGRAFÍA DE MARCA (oficial): Glacial Indifference.
-     Jerarquía por peso — Bold en títulos, Regular en cuerpo.
+     Jerarquía por peso: Bold en títulos, Regular en cuerpo.
    ============================================================ */
 
 @font-face {
@@ -25,10 +25,10 @@
 
 :root {
   /* --- Colores de marca --- */
-  --earth:       #5C3D2E;   /* Tierra Patagónica — marrón cálido */
-  --green:       #4A6741;   /* Bosque Austral — verde primario */
-  --stone:       #A8A39D;   /* Piedra Glaciar — gris neutro */
-  --glacier:     #6B9BAD;   /* Hielo Azul — acento frío */
+  --earth:       #5C3D2E;   /* Tierra Patagónica, marrón cálido */
+  --green:       #4A6741;   /* Bosque Austral, verde primario */
+  --stone:       #A8A39D;   /* Piedra Glaciar, gris neutro */
+  --glacier:     #6B9BAD;   /* Hielo Azul, acento frío */
 
   /* --- Derivados / neutros de apoyo --- */
   --bone:        #F6F3EE;   /* fondo cálido */

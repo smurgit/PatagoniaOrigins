@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finalizar compra — Patagonia Origins Co.</title>
+  <title>Finalizar compra | Patagonia Origins Co.</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -201,7 +201,7 @@
             <div class="sum-line" style="padding-top:.2rem"><span></span><span class="muted" style="font-size:.8rem">${priceARSref(cart.reduce((s,i)=>{const p=getProduct(i.id);return p?s+p.priceARS*i.qty:s;},0))} ${State.lang==="es"?"aprox.":"approx."}</span></div>
             <div class="sum-guarantee">
               <span style="color:var(--green)">✓</span>
-              <span><b>${t("trust.guarantee")}</b> — ${t("trust.curated")}.</span>
+              <span><b>${t("trust.guarantee")}.</b> ${t("trust.curated")}.</span>
             </div>
           </aside>
         </div>`;

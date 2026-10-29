@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pago seguro — Patagonia Origins Co.</title>
+  <title>Pago seguro | Patagonia Origins Co.</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -74,7 +74,7 @@
           <div class="chip"></div>
           <div class="pan">•••• •••• •••• 4321</div>
           <div class="row">
-            <span>${t("co.f.name")}<b id="pv-name">—</b></span>
+            <span>${t("co.f.name")}<b id="pv-name">NOMBRE</b></span>
             <span>${t("pay.card.exp")}<b id="pv-exp">MM/AA</b></span>
           </div>
         </div>
@@ -85,7 +85,7 @@
         </div>
         <div class="co-field">
           <label>${t("pay.card.name")}</label>
-          <input type="text" placeholder="—" oninput="document.getElementById('pv-name').textContent=this.value||'—'">
+          <input type="text" placeholder="Como figura en la tarjeta" oninput="document.getElementById('pv-name').textContent=this.value||'NOMBRE'">
         </div>
         <div class="co-grid2">
           <div class="co-field">

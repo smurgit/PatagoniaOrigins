@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Producto — Patagonia Origins Co.</title>
+  <title>Producto | Patagonia Origins Co.</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -86,7 +86,7 @@
         `<a href="index.html">${t("nav.home")}</a> · <a href="catalogo.html">${t("nav.shop")}</a> · <a href="catalogo.html?category=${p.category}">${tf(cat.name)}</a> · <span>${tf(p.name)}</span>`;
 
       // Galería: foto real del producto (con variaciones de placeholder como respaldo)
-      const imgs = p.image ? [p.image] : [
+      const imgs = p.images ? p.images : p.image ? [p.image] : [
         photoPlaceholder(p, true),
         photoPlaceholder({ ...p, swatch: [p.swatch[1], p.swatch[0]] }, true),
         photoPlaceholder({ ...p, swatch: ["#7A7466", p.swatch[0]] }, true),
@@ -215,7 +215,7 @@
           <div class="product-grid cols-3">${related.map(productCardHTML).join("")}</div>
         </div>` : ""}
       `;
-      document.title = `${tf(p.name)} — Patagonia Origins Co.`;
+      document.title = `${tf(p.name)} | Patagonia Origins Co.`;
     };
   </script>
 </body>

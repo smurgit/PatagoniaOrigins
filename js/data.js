@@ -1,5 +1,5 @@
 /* ============================================================
-   Patagonia Origins Co. — Datos de ejemplo (MOCKUP / MVP)
+   Patagonia Origins Co. | Datos de ejemplo (MOCKUP / MVP)
    No hay backend real: catálogo, stock y precios son de muestra.
    La arquitectura soporta DOS segmentos (crucero / esquí) desde
    el diseño de datos, no como agregado posterior.
@@ -65,11 +65,11 @@ const PRODUCTS = [
              en: "Made by Estela R.'s textile workshop, Tolhuin." },
     story: {
       es: "Elegimos la pura lana de oveja fueguina por su textura honesta y su abrigo generoso, capaz de aislar del frío de forma natural. Esta fibra noble cobra vida en un telar de pie; un oficio entrañable que en Tierra del Fuego pasa con orgullo de madres a hijas. Nos conmueve esta manta no solo por su liviandad, sino por el carácter único e irrepetible de cada una de sus tramas, pensadas para acompañarte toda la vida.",
-      en: "We chose pure Fuegian sheep wool for its honest texture and generous warmth, able to insulate from the cold naturally. This noble fiber comes to life on a standing loom — a beloved craft that in Tierra del Fuego passes proudly from mothers to daughters. This throw moves us not only for its lightness, but for the unique, unrepeatable character of each of its weaves, made to be with you for a lifetime.",
+      en: "We chose pure Fuegian sheep wool for its honest texture and generous warmth, able to insulate from the cold naturally. This noble fiber comes to life on a standing loom, a beloved craft that in Tierra del Fuego passes proudly from mothers to daughters. This throw moves us not only for its lightness, but for the unique, unrepeatable character of each of its weaves, made to be with you for a lifetime.",
     },
     packaging: {
       es: "Viaja protegida dentro de una bolsa de tela de lienzo natural, hecha a mano y reutilizable. Llega cuidadosamente doblada y atada con un lazo de pura lana de oveja hilada en la isla, un detalle simple y honesto de nuestro origen.",
-      en: "It travels protected inside a handmade, reusable natural canvas bag. It arrives carefully folded and tied with a ribbon of pure sheep wool spun on the island — a simple, honest detail of our origin.",
+      en: "It travels protected inside a handmade, reusable natural canvas bag. It arrives carefully folded and tied with a ribbon of pure sheep wool spun on the island, a simple, honest detail of our origin.",
     },
     reviews: [
       { author: "Margaret H.", rating: 5, verified: true,
@@ -103,7 +103,7 @@ const PRODUCTS = [
              en: "Made by Cooperativa Lanas del Sur, Ushuaia." },
     story: {
       es: "Esta pieza nace de la lana merino de rebaños patagónicos, hilada y teñida con procesos de bajo impacto. Cada gorro toma cerca de cuatro horas de paciente tejido a dos agujas por las artesanas de la cooperativa. Lo elegimos por ser un abrigo real y noble frente al viento de Ushuaia, lejos de ser un simple souvenir decorativo.",
-      en: "This piece is born from merino wool of Patagonian flocks, spun and dyed with low-impact processes. Each beanie takes about four hours of patient two-needle knitting by the cooperative's artisans. We chose it as real, noble protection against the Ushuaia wind — far from a mere decorative souvenir.",
+      en: "This piece is born from merino wool of Patagonian flocks, spun and dyed with low-impact processes. Each beanie takes about four hours of patient two-needle knitting by the cooperative's artisans. We chose it as real, noble protection against the Ushuaia wind, far from a mere decorative souvenir.",
     },
     packaging: {
       es: "Se entrega dentro de una bolsa de algodón natural y reutilizable, con nuestro sello de origen impreso a mano.",
@@ -229,8 +229,8 @@ const PRODUCTS = [
       en: "Ceramics shaped and glazed by hand in Tierra del Fuego. Each mug is a one-of-a-kind piece made by a local artisan, not imported. Its tones are inspired by the ice and the moss of our forests. We chose it to be with you every morning as a simple keepsake of your trip.",
     },
     packaging: {
-      es: "Protegida en nido de viruta de madera reciclada dentro de caja rígida — sólida para el equipaje y cuidada al abrir.",
-      en: "Nested in recycled wood shavings inside a rigid box — sturdy for luggage and refined to unbox.",
+      es: "Protegida en nido de viruta de madera reciclada dentro de caja rígida, sólida para el equipaje y cuidada al abrir.",
+      en: "Nested in recycled wood shavings inside a rigid box, sturdy for luggage and refined to unbox.",
     },
     reviews: [
       { author: "Sofía G.", rating: 5, verified: true,
@@ -308,7 +308,7 @@ const PRODUCTS = [
     segment: "both",
     name:   { es: "Pingüinos viajeros de madera",        en: "Wooden Travelling Penguins" },
     tagline:{ es: "Pintados a mano, uno por uno",         en: "Hand-painted, one by one" },
-    priceUSD: 34, priceARS: 44200,
+    priceUSD: 62, priceARS: 80600,
     stock: 14,
     featured: false, isNew: true,
     collections: ["historias", "regalo"],
@@ -319,15 +319,15 @@ const PRODUCTS = [
       { id: "snowboard",  label: { es: "Pingüino snowboarder", en: "Snowboarder penguin" },   priceDelta: 0, stock: 3 },
       { id: "clasico",    label: { es: "Pingüino clásico",     en: "Classic penguin" },       priceDelta: 0, stock: 3 },
     ],
-    maker: { es: "Hecho a mano por un taller artesanal de la Patagonia.",
-             en: "Handmade by an artisan workshop in Patagonia." },
+    maker: { es: "Hecho a mano por artesanos fueguinos.",
+             en: "Handmade by artisans from Tierra del Fuego." },
     story: {
       es: "Pingüinos que viajan como vos: uno con su cámara, otro con patines, otro listo para la nieve. Cada figura de madera se pinta a mano, trazo a trazo, por lo que no hay dos iguales. Son un recuerdo para llevar a casa, o para regalarle a quien se quedó esperando tu regreso del fin del mundo.",
       en: "Penguins that travel just like you: one with his camera, another on skates, another ready for the snow. Each wooden figure is painted by hand, stroke by stroke, so no two are alike. A keepsake to take home, or to give to whoever stayed behind waiting for you to come back from the end of the world.",
     },
     packaging: {
-      es: "Cada figura viaja envuelta en papel de seda dentro de una caja de cartón rígido, protegida para el equipaje.",
-      en: "Each figure travels wrapped in tissue paper inside a rigid cardboard box, protected for your luggage.",
+      es: "Packaging premium sustentable: cada figura viaja envuelta en papel de seda reciclable dentro de una caja rígida de cartón, protegida para el equipaje.",
+      en: "Premium sustainable packaging: each figure travels wrapped in recyclable tissue paper inside a rigid cardboard box, protected for your luggage.",
     },
     reviews: [],
     related: ["p06", "p10", "p03"],
@@ -346,15 +346,15 @@ const PRODUCTS = [
     collections: ["temporada", "regalo"],
     swatch: ["#7FA3B8", "#D6E6EE"],
     variants: null,
-    maker: { es: "Elaborado por ANAN, chocolatería de autor.",
-             en: "Made by ANAN, a signature chocolatier." },
+    maker: { es: "Elaborado por ANAN, chocolatería patagónica de autor.",
+             en: "Made by ANAN, a Patagonian signature chocolatier." },
     story: {
-      es: "Una caja que condensa el paisaje austral: bombones de autor de distintas formas y texturas, con una ballena de chocolate como pieza central. El estuche, con su ilustración de hielos y glaciares, ya es parte del regalo.",
-      en: "A box that condenses the southern landscape: signature chocolates in different shapes and textures, with a chocolate whale as the centerpiece. The box, with its illustration of ice and glaciers, is already part of the gift.",
+      es: "Una caja que condensa el paisaje austral: chocolate patagónico de autor, en bombones de distintas formas y texturas, con una ballena de chocolate como pieza central. El estuche, con su ilustración de hielos y glaciares, ya es parte del regalo.",
+      en: "A box that condenses the southern landscape: Patagonian signature chocolate, in bonbons of different shapes and textures, with a chocolate whale as the centerpiece. The box, with its illustration of ice and glaciers, is already part of the gift.",
     },
     packaging: {
-      es: "Estuche rígido con tapa ilustrada, pensado para viajar y regalar sin necesidad de envoltorio adicional.",
-      en: "Rigid box with an illustrated lid, made to travel and to gift without extra wrapping.",
+      es: "Packaging premium sustentable: estuche rígido de cartón reciclable con tapa ilustrada, pensado para viajar y regalar sin envoltorio adicional.",
+      en: "Premium sustainable packaging: rigid recyclable cardboard box with an illustrated lid, made to travel and to gift without extra wrapping.",
     },
     reviews: [],
     related: ["p03", "p11", "p05"],
@@ -373,15 +373,15 @@ const PRODUCTS = [
     collections: ["historias", "regalo"],
     swatch: ["#A64F5E", "#E4B4BE"],
     variants: null,
-    maker: { es: "Elaborado por ANAN, chocolatería de autor.",
-             en: "Made by ANAN, a signature chocolatier." },
+    maker: { es: "Elaborado por ANAN, chocolatería patagónica de autor.",
+             en: "Made by ANAN, a Patagonian signature chocolatier." },
     story: {
-      es: "La ballena es la gran visitante de estas aguas, y acá se vuelve una pieza de chocolate modelada con detalle, hasta en las aletas y los pliegues. Para comer, o para mirar un rato antes de animarse.",
-      en: "The whale is the great visitor of these waters, and here it becomes a chocolate piece sculpted in detail, down to the fins and folds. To eat, or to admire for a while before daring to.",
+      es: "La ballena es la gran visitante de estas aguas, y acá se vuelve una pieza de chocolate patagónico modelada con detalle, hasta en las aletas y los pliegues. Para comer, o para mirar un rato antes de animarse.",
+      en: "The whale is the great visitor of these waters, and here it becomes a piece of Patagonian chocolate sculpted in detail, down to the fins and folds. To eat, or to admire for a while before daring to.",
     },
     packaging: {
-      es: "Se entrega en estuche protector que cuida la forma de la pieza durante el viaje.",
-      en: "Delivered in a protective box that keeps the piece's shape safe during your trip.",
+      es: "Packaging premium sustentable: estuche protector de cartón reciclable que cuida la forma de la pieza durante el viaje.",
+      en: "Premium sustainable packaging: protective recyclable cardboard box that keeps the piece's shape safe during your trip.",
     },
     reviews: [],
     related: ["p10", "p03", "p05"],
@@ -403,12 +403,12 @@ const PRODUCTS = [
     maker: { es: "Elaborada por San Andrés, chacinados fueguinos.",
              en: "Made by San Andrés, Fuegian cured meats." },
     story: {
-      es: "Elaborada con cortes ovinos seleccionados y ahumada delicadamente durante 12 horas, período en el que su sabor se resignifica. Viene lista para feteada, con una cobertura de harina de maíz especiada con notas de enebro e hinojo, que remite a la pitina friulana.",
-      en: "Made with selected lamb cuts and gently smoked for 12 hours, a period in which its flavor takes on new meaning. It comes ready to slice, with a spiced cornmeal crust with notes of juniper and fennel, nodding to the Friulian pitina.",
+      es: "Elaborada con cortes ovinos seleccionados y ahumada delicadamente durante 12 horas, período en el que su sabor se resignifica. Viene lista para feteada, con una cobertura de harina de maíz especiada con notas de enebro e hinojo, que remite a la pitina friulana. Cuenta con aprobación bromatológica y sanitaria, y viene envasada al vacío.",
+      en: "Made with selected lamb cuts and gently smoked for 12 hours, a period in which its flavor takes on new meaning. It comes ready to slice, with a spiced cornmeal crust with notes of juniper and fennel, nodding to the Friulian pitina. It has food-safety and sanitary approval and comes vacuum-sealed.",
     },
     packaging: {
-      es: "Estuche de cartón con ventana, que permite ver la pieza, y cierre protector para el traslado.",
-      en: "Cardboard sleeve with a window to see the piece, and a protective seal for transport.",
+      es: "Packaging premium sustentable: envasada al vacío, dentro de un estuche de cartón reciclable con ventana que permite ver la pieza.",
+      en: "Premium sustainable packaging: vacuum-sealed, inside a recyclable cardboard sleeve with a window to see the piece.",
     },
     reviews: [],
     related: ["p03", "p05", "p10"],
@@ -416,6 +416,8 @@ const PRODUCTS = [
   {
     id: "p13",
     slug: "poncho-lana-guarda-pampa",
+    image: "img/p13.jpg",
+    images: ["img/p13.jpg", "img/p13b.jpg"],
     category: "tejidos",
     segment: "both",
     name:   { es: "Poncho de lana de oveja con guarda pampa", en: "Sheep Wool Poncho with Pampa Border" },
@@ -426,15 +428,15 @@ const PRODUCTS = [
     collections: ["historias", "regalo"],
     swatch: ["#B5A184", "#E8DFCB"],
     variants: null,
-    maker: { es: "Elaborado por un taller textil de la Patagonia.",
-             en: "Made by a textile workshop in Patagonia." },
+    maker: { es: "Hilanderas artesanales fueguinas, con lana patagónica.",
+             en: "Artisan spinners from Tierra del Fuego, with Patagonian wool." },
     story: {
-      es: "Un poncho en lana de oveja de tono crudo natural, con una guarda de dibujos de inspiración pampeana. Abrigado y de caída generosa, es una de esas prendas que se heredan.",
-      en: "A poncho in natural ecru sheep wool, with a border of pampa-inspired patterns. Warm and generously cut, it is one of those garments that gets passed down.",
+      es: "Un poncho en lana de oveja patagónica de tono crudo natural, tejido por hilanderas fueguinas,, con una guarda de dibujos de inspiración pampeana. Abrigado y de caída generosa, es una de esas prendas que se heredan.",
+      en: "A poncho in natural ecru Patagonian sheep wool, woven by spinners from Tierra del Fuego,, with a border of pampa-inspired patterns. Warm and generously cut, it is one of those garments that gets passed down.",
     },
     packaging: {
-      es: "Plegado con papel de seda y bolsa de tela de algodón natural, reutilizable.",
-      en: "Folded with tissue paper in a reusable natural cotton bag.",
+      es: "Packaging premium sustentable: plegado con papel de seda reciclable y bolsa de algodón natural reutilizable.",
+      en: "Premium sustainable packaging: folded with recyclable tissue paper in a reusable natural cotton bag.",
     },
     reviews: [],
     related: ["p14", "p01", "p04"],
@@ -442,6 +444,7 @@ const PRODUCTS = [
   {
     id: "p14",
     slug: "poncho-rustico-patagonia",
+    image: "img/p14.jpg",
     category: "tejidos",
     segment: "both",
     name:   { es: "Poncho rústico patagónico",                 en: "Rustic Patagonian Poncho" },
@@ -452,15 +455,15 @@ const PRODUCTS = [
     collections: ["temporada", "historias"],
     swatch: ["#6F6A63", "#B7AFA0"],
     variants: null,
-    maker: { es: "Elaborado por un taller textil de la Patagonia.",
-             en: "Made by a textile workshop in Patagonia." },
+    maker: { es: "Hilanderas artesanales fueguinas, con lana patagónica.",
+             en: "Artisan spinners from Tierra del Fuego, with Patagonian wool." },
     story: {
-      es: "Lana de oveja 100% hilada gruesa a mano, con tintes naturales y tejida en telar artesanal de pedal. De 1,70 x 1,40 m, en gris jaspeado y marrón grisáceo, con una franja central en crudo y flecos finos. Pesado, rústico y hecho para durar.",
-      en: "100% sheep wool, thickly hand-spun, with natural dyes and woven on an artisan pedal loom. At 1.70 x 1.40 m, in heathered gray and grayish brown, with a central ecru stripe and fine fringes. Heavy, rustic and made to last.",
+      es: "Lana de oveja patagónica 100%, hilada gruesa a mano por hilanderas fueguinas, con tintes naturales y tejida en telar artesanal de pedal. De 1,70 x 1,40 m, en gris jaspeado y marrón grisáceo, con una franja central en crudo y flecos finos. Pesado, rústico y hecho para durar.",
+      en: "100% Patagonian sheep wool, thickly hand-spun by spinners from Tierra del Fuego, with natural dyes and woven on an artisan pedal loom. At 1.70 x 1.40 m, in heathered gray and grayish brown, with a central ecru stripe and fine fringes. Heavy, rustic and made to last.",
     },
     packaging: {
-      es: "Plegado con papel de seda y faja de cartón con la historia del taller impresa.",
-      en: "Folded with tissue paper and a board band printed with the workshop's story.",
+      es: "Packaging premium sustentable: plegado con papel de seda reciclable y faja de cartón reciclable con la historia de las hilanderas impresa.",
+      en: "Premium sustainable packaging: folded with recyclable tissue paper and a recyclable board band printed with the spinners' story.",
     },
     reviews: [],
     related: ["p13", "p01", "p04"],
