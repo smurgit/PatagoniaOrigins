@@ -483,8 +483,8 @@ const PRODUCTS = [
     collections: ["historias", "regalo"],
     swatch: ["#1F4E8C", "#BFD9EE"],
     variants: null,
-    maker: { es: "Fotografías de Pinogesky, fotógrafo local, con texto de Carlos Masotta.",
-             en: "Photographs by Pinogesky, a local photographer, with text by Carlos Masotta." },
+    maker: { es: "De Andrés Camacho, fotógrafo local, con texto de Carlos Masotta.",
+             en: "By Andrés Camacho, a local photographer, with text by Carlos Masotta." },
     story: {
       es: "Cuarenta años recorriendo Tierra del Fuego y la Antártida con una cámara dan como resultado este libro de gran formato, de impresión de altísima calidad y con muchísimas páginas. Glaciares, icebergs y montañas al atardecer, vistos por alguien que conoce estos paisajes como pocos. Es el recuerdo más fiel del viaje: el que se queda sobre la mesa y se vuelve a abrir.",
       en: "Forty years traveling through Tierra del Fuego and Antarctica with a camera result in this large-format book, printed to the highest quality and with a great many pages. Glaciers, icebergs and mountains at sunset, seen by someone who knows these landscapes like few others. It is the most faithful keepsake of the journey: the one that stays on the table and gets opened again and again.",
